@@ -21,8 +21,16 @@ app.use(express.json());
 
 const path = require('path');
 
-// Serve static files from the React client build
-app.use(express.static(path.join(__dirname, '../client/dist')));
+// Serve static files from the React client build (preventing html caching)
+app.use(express.static(path.join(__dirname, '../client/dist'), {
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
+    }
+  }
+}));
 
 // Basic health check endpoint
 app.get('/health', (req, res) => {
@@ -179,9 +187,19 @@ io.on('connection', (socket) => {
   });
 });
 
-// All other GET requests not handled before will return the React app
+// All other GET requests not handled before will return the React app (preventing html caching)
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  
+  const indexPath = path.join(__dirname, '../client/dist/index.html');
+  res.sendFile(indexPath, (err) => {
+    if (err) {
+      console.error("Error sending index.html:", err);
+      res.status(500).send("Index file not found. Make sure the build succeeded.");
+    }
+  });
 });
 
 const PORT = process.env.PORT || 3001;
