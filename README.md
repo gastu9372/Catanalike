@@ -2,7 +2,7 @@
 
 ¡Bienvenido a **Catanalike**! Esta es una implementación moderna y completamente jugable del clásico juego de mesa **Catan (Colonos de Catan)**, construida con una arquitectura cliente-servidor en tiempo real, soporte para jugadores artificiales (Bots inteligentes) y una interfaz de usuario inmersiva con estilo *glassmorphic*.
 
-El proyecto cuenta con un modo de juego manual, simulación automática de partidas (Autoplay con bots) y herramientas avanzadas de depuración para probar escenarios competitivos al instante.
+El proyecto cuenta con un modo de juego manual y simulación automática de partidas (Autoplay con bots).
 
 ---
 
@@ -42,15 +42,7 @@ El proyecto cuenta con un modo de juego manual, simulación automática de parti
   - Mueven al ladrón al hexágono con mayor producción acumulada de sus rivales.
 - Puedes llenar la partida completa con bots para simular una partida automatizada de inicio a fin (*Autoplay*).
 
-### 6. Modo de Depuración (Dev Panel)
-- Panel colapsable integrado en la UI para pruebas rápidas y QA:
-  - **📥 +5 Recursos:** Suma al instante 5 unidades de cada recurso.
-  - **⚔️ +1 Cab. Jugado:** Añade un caballero jugado para disputar el Mayor Ejército.
-  - **👑 Ganar Partida:** Otorga cartas de Puntos de Victoria para ganar al instante.
-  - **🎴 Agregar Carta:** Añade cualquier carta de desarrollo específica a tu mano.
-  - **🎲 Forzar Dados:** Fuerza tiradas de números específicos (como un `7` para probar el Ladrón).
-
-### 7. Pantalla de Fin de Partida y Estadísticas
+### 6. Pantalla de Fin de Partida y Estadísticas
 - Al terminar la partida, un overlay elegante muestra:
   - **Premios Especiales:** Medallas al *Gran Agricultor* (más recursos recolectados), *Erudito de las Cartas* (más compras de cartas), *Gran General* (mayor ejército) y *Gran Arquitecto* (ruta más larga).
   - **Estadísticas de Dados:** Gráfico de barras horizontales detallando la cantidad y porcentaje de veces que salió cada número en la partida.
@@ -112,4 +104,4 @@ cd Catanalike
 3. Copia el código de sala de 4 letras que aparece arriba a la derecha si deseas que otros jugadores humanos se unan desde sus navegadores (o abre otra pestaña de incógnito).
 4. Para jugar solo, haz clic en **Añadir Bot** hasta completar la sala (máximo 4 jugadores en total).
 5. Haz clic en **Comenzar Partida**.
-6. Coloca tus asentamientos iniciales y disfruta de la partida clásica o usa el **Modo de Depuración** en la esquina inferior derecha para acelerar y testear las funciones del juego.
+6. Coloca tus asentamientos iniciales y disfruta de la partida clásica.

@@ -38,6 +38,8 @@ function GamePanel({ game, playerId, buildMode, setBuildMode, onAction, language
   const isMyTurn = activePlayerId === playerId;
   const me = game.players.find(p => p.id === playerId);
 
+  const isDevMode = new URLSearchParams(window.location.search).get('dev') === 'true' || new URLSearchParams(window.location.search).get('debug') === 'true';
+
   // --- LOCAL COMPONENT STATES ---
   // Bank trading inputs
   const [bankGiveRes, setBankGiveRes] = useState('wood');
@@ -649,93 +651,95 @@ function GamePanel({ game, playerId, buildMode, setBuildMode, onAction, language
       </div>
 
       {/* 11. DEV/DEBUGGING PANEL */}
-      <div className="sub-panel-card" style={{ marginTop: '1rem', border: '1px solid var(--border-glass)', background: 'rgba(255, 255, 255, 0.03)' }}>
-        <button 
-          onClick={() => setShowDevPanel(!showDevPanel)}
-          style={{ width: '100%', background: 'none', border: 'none', color: '#a0aec0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', padding: 0 }}
-        >
-          <span style={{ fontSize: '0.85rem', fontWeight: 'bold' }}>🔧 {language === 'es' ? 'Modo de Depuración (Dev)' : 'Debug Mode (Dev)'}</span>
-          <span style={{ fontSize: '0.8rem' }}>{showDevPanel ? '▲' : '▼'}</span>
-        </button>
-
-        {showDevPanel && (
-          <div style={{ marginTop: '0.8rem', display: 'flex', flexDirection: 'column', gap: '0.8rem', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '0.8rem' }}>
-            {/* Resources, Played Knights, and Instant Win */}
-            <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-              <button 
-                className="btn-build"
-                onClick={() => onAction('dev_action', { command: 'add_resources', payload: {} })}
-                style={{ flex: '1 1 45%', fontSize: '0.8rem', padding: '0.4rem 0' }}
-              >
-                📥 +5 {language === 'es' ? 'Recursos' : 'Resources'}
-              </button>
-              <button 
-                className="btn-build"
-                onClick={() => onAction('dev_action', { command: 'add_played_knight', payload: {} })}
-                style={{ flex: '1 1 45%', fontSize: '0.8rem', padding: '0.4rem 0' }}
-              >
-                ⚔️ +1 {language === 'es' ? 'Cab. Jugado' : 'Pl. Knight'}
-              </button>
-              <button 
-                className="btn-build"
-                onClick={() => onAction('dev_action', { command: 'win_game', payload: {} })}
-                style={{ flex: '1 1 100%', fontSize: '0.8rem', padding: '0.4rem 0', background: 'linear-gradient(135deg, #10b981 0%, #047857 100%)', color: '#fff', border: 'none' }}
-              >
-                👑 {language === 'es' ? 'Ganar Partida' : 'Win Game'}
-              </button>
-            </div>
-
-            {/* Dev Cards row */}
-            <div>
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '0.3rem' }}>
-                🎴 {language === 'es' ? 'Agregar Carta de Desarrollo' : 'Add Development Card'}:
-              </span>
-              <div style={{ display: 'flex', gap: '0.2rem', flexWrap: 'wrap' }}>
-                {[
-                  { type: 'victoryPoint', emoji: '🏆', label: 'VP' },
-                  { type: 'knight', emoji: '🛡️', label: 'Kn' },
-                  { type: 'roadBuilding', emoji: '🛠️', label: 'Rd' },
-                  { type: 'yearOfPlenty', emoji: '🌾', label: 'YoP' },
-                  { type: 'monopoly', emoji: '📜', label: 'Mon' }
-                ].map(card => (
-                  <button
-                    key={card.type}
-                    className="btn-build"
-                    onClick={() => onAction('dev_action', { command: 'add_dev_card', payload: { cardType: card.type } })}
-                    style={{ flex: '1 0 18%', fontSize: '0.7rem', padding: '0.3rem 0' }}
-                    title={card.type}
-                  >
-                    {card.emoji} {card.label}
-                  </button>
-                ))}
+      {isDevMode && (
+        <div className="sub-panel-card" style={{ marginTop: '1rem', border: '1px solid var(--border-glass)', background: 'rgba(255, 255, 255, 0.03)' }}>
+          <button 
+            onClick={() => setShowDevPanel(!showDevPanel)}
+            style={{ width: '100%', background: 'none', border: 'none', color: '#a0aec0', display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', padding: 0 }}
+          >
+            <span style={{ fontSize: '0.85rem', fontWeight: 'bold' }}>🔧 {language === 'es' ? 'Modo de Depuración (Dev)' : 'Debug Mode (Dev)'}</span>
+            <span style={{ fontSize: '0.8rem' }}>{showDevPanel ? '▲' : '▼'}</span>
+          </button>
+  
+          {showDevPanel && (
+            <div style={{ marginTop: '0.8rem', display: 'flex', flexDirection: 'column', gap: '0.8rem', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '0.8rem' }}>
+              {/* Resources, Played Knights, and Instant Win */}
+              <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
+                <button 
+                  className="btn-build"
+                  onClick={() => onAction('dev_action', { command: 'add_resources', payload: {} })}
+                  style={{ flex: '1 1 45%', fontSize: '0.8rem', padding: '0.4rem 0' }}
+                >
+                  📥 +5 {language === 'es' ? 'Recursos' : 'Resources'}
+                </button>
+                <button 
+                  className="btn-build"
+                  onClick={() => onAction('dev_action', { command: 'add_played_knight', payload: {} })}
+                  style={{ flex: '1 1 45%', fontSize: '0.8rem', padding: '0.4rem 0' }}
+                >
+                  ⚔️ +1 {language === 'es' ? 'Cab. Jugado' : 'Pl. Knight'}
+                </button>
+                <button 
+                  className="btn-build"
+                  onClick={() => onAction('dev_action', { command: 'win_game', payload: {} })}
+                  style={{ flex: '1 1 100%', fontSize: '0.8rem', padding: '0.4rem 0', background: 'linear-gradient(135deg, #10b981 0%, #047857 100%)', color: '#fff', border: 'none' }}
+                >
+                  👑 {language === 'es' ? 'Ganar Partida' : 'Win Game'}
+                </button>
+              </div>
+  
+              {/* Dev Cards row */}
+              <div>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '0.3rem' }}>
+                  🎴 {language === 'es' ? 'Agregar Carta de Desarrollo' : 'Add Development Card'}:
+                </span>
+                <div style={{ display: 'flex', gap: '0.2rem', flexWrap: 'wrap' }}>
+                  {[
+                    { type: 'victoryPoint', emoji: '🏆', label: 'VP' },
+                    { type: 'knight', emoji: '🛡️', label: 'Kn' },
+                    { type: 'roadBuilding', emoji: '🛠️', label: 'Rd' },
+                    { type: 'yearOfPlenty', emoji: '🌾', label: 'YoP' },
+                    { type: 'monopoly', emoji: '📜', label: 'Mon' }
+                  ].map(card => (
+                    <button
+                      key={card.type}
+                      className="btn-build"
+                      onClick={() => onAction('dev_action', { command: 'add_dev_card', payload: { cardType: card.type } })}
+                      style={{ flex: '1 0 18%', fontSize: '0.7rem', padding: '0.3rem 0' }}
+                      title={card.type}
+                    >
+                      {card.emoji} {card.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+  
+              {/* Dice forced rolls */}
+              <div>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '0.3rem' }}>
+                  🎲 {language === 'es' ? 'Forzar Tirada de Dados' : 'Force Dice Roll'}:
+                </span>
+                <div style={{ display: 'flex', gap: '0.4rem' }}>
+                  {[
+                    { r1: 3, r2: 4, label: '7 (Ladrón)' },
+                    { r1: 3, r2: 3, label: '6' },
+                    { r1: 4, r2: 4, label: '8' }
+                  ].map(roll => (
+                    <button
+                      key={roll.label}
+                      className="btn-build"
+                      onClick={() => onAction('dev_action', { command: 'set_dice', payload: { roll1: roll.r1, roll2: roll.r2 } })}
+                      style={{ flex: 1, fontSize: '0.75rem', padding: '0.3rem 0' }}
+                    >
+                      🎲 {roll.label}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
-
-            {/* Dice forced rolls */}
-            <div>
-              <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', display: 'block', marginBottom: '0.3rem' }}>
-                🎲 {language === 'es' ? 'Forzar Tirada de Dados' : 'Force Dice Roll'}:
-              </span>
-              <div style={{ display: 'flex', gap: '0.4rem' }}>
-                {[
-                  { r1: 3, r2: 4, label: '7 (Ladrón)' },
-                  { r1: 3, r2: 3, label: '6' },
-                  { r1: 4, r2: 4, label: '8' }
-                ].map(roll => (
-                  <button
-                    key={roll.label}
-                    className="btn-build"
-                    onClick={() => onAction('dev_action', { command: 'set_dice', payload: { roll1: roll.r1, roll2: roll.r2 } })}
-                    style={{ flex: 1, fontSize: '0.75rem', padding: '0.3rem 0' }}
-                  >
-                    🎲 {roll.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
     </>
   );
 }
