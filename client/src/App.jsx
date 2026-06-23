@@ -9,7 +9,10 @@ import GamePanel from './components/GamePanel';
 // Socket server URL
 // For local testing: http://localhost:3001
 // For production: will be configured via environment or fallback to current origin for unified hosting
-const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:3001';
+const SERVER_URL = import.meta.env.VITE_SERVER_URL || 
+  (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+    ? 'http://localhost:3001' 
+    : window.location.origin);
 
 // Get or generate player ID
 const getPlayerId = () => {

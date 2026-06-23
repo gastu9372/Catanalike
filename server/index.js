@@ -19,6 +19,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const path = require('path');
+
+// Serve static files from the React client build
+app.use(express.static(path.join(__dirname, '../client/dist')));
+
 // Basic health check endpoint
 app.get('/health', (req, res) => {
   res.send({ status: 'ok', uptime: process.uptime() });
@@ -172,6 +177,11 @@ io.on('connection', (socket) => {
       }
     }
   });
+});
+
+// All other GET requests not handled before will return the React app
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
 
 const PORT = process.env.PORT || 3001;

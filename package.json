@@ -1,0 +1,13 @@
+{
+  "name": "catanalike-root",
+  "version": "1.0.0",
+  "description": "Unified Catanalike Catan Autoplay application for simple deployment",
+  "scripts": {
+    "install:server": "npm install --prefix server",
+    "install:client": "npm install --prefix client",
+    "install-all": "npm run install:server && npm run install:client",
+    "build:client": "npm run build --prefix client",
+    "build": "npm run install-all && npm run build:client",
+    "start": "node server/index.js"
+  }
+}
